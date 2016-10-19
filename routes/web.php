@@ -17,8 +17,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-/*Route::get('contact', 'PagesController@contact');
-
+Route::get('contact', 'PagesController@contact');
+/*
 Route::get('articles', 'ArticleController@index');
 Route::get('articles/create', 'ArticleController@create');
 Route::get('articles/{id}', 'ArticleController@show')->where('id', '[0-9]+');

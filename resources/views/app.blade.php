@@ -12,6 +12,7 @@
     <title>Document</title>
 </head>
 <body>
+    @include('partials/navbar')
     <div class="content">
         {{--@include('partials/flash')--}}
         @include('vendor/flash/message')

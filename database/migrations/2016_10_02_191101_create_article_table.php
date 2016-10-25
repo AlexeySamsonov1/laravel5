@@ -37,6 +37,8 @@ class CreateArticleTable extends Migration
      */
     public function down()
     {
-        Schema::drop('article');
+        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
+        Schema::dropIfExists('article');
+        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

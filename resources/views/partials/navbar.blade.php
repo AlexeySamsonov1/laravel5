@@ -36,7 +36,12 @@
                 <button type="submit" class="btn btn-default">Submit</button>
             </form>
             <ul class="nav navbar-nav navbar-right">
-                <li>{!! link_to_action('ArticleController@show', $latest->title, [$latest->id]) !!}</li>
+                @if( is_null($latest) )
+                    <li>No articles</li>
+                @else
+                    <li>{!! link_to_action('ArticleController@show', $latest->title, [$latest->id]) !!}</li>
+                @endif
+
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
                     <ul class="dropdown-menu">

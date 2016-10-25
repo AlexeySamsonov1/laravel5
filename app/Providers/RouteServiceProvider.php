@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -18,13 +19,24 @@ class RouteServiceProvider extends ServiceProvider
 
     /**
      * Define your route model bindings, pattern filters, etc.
-     *
-     * @return void
      */
     public function boot()
     {
-        //
+        //$this->model('article', '\App\Article');
+        $this->bind('article', function ($id) {
+//dd(\Auth::check());
+            if ( ! \Auth::check())
+            {
+                return \App\Article::isPublished()->findOrFail($id);
+            }
+            else {
+                return \App\Article::findOrFail($id);
+            }
+        });
 
+        $this->bind('tag', function ($name) {
+            return \App\Tag::where('name', $name)->firstOrFail();
+        });
         parent::boot();
     }
 

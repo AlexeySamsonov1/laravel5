@@ -33,9 +33,26 @@ class Article extends Model
         'published_at'
     ];
 
+    /**
+     * Set the published_at attribute.
+     *
+     * @param $date
+     */
     public function setPublishedAtAttribute($date)
     {
         $this->attributes['published_at'] = Carbon::parse($date);
+    }
+
+
+    /**
+     *
+     *
+     * @param $date
+     * @return Carbon
+     */
+    public function getPublishedAtAttribute($date)
+    {
+        return new Carbon($date);
     }
 
     public function scopeIsPublished($query)
@@ -50,7 +67,7 @@ class Article extends Model
      */
     public function getUser()
     {
-        return $this->belongsTo('\App\User');
+        return $this->belongsTo('\App\User', 'user_id');
     }
 
     /**
@@ -64,14 +81,27 @@ class Article extends Model
     }
 
     /**
+     * Give the comments associated with given article.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function getComments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    /**
      * Get a list of tags ids associated with the current article.
      *
      * @return array
      */
     public function getTagListAttribute()
     {
-        //dd($this->getTags->pluck('id')->all());
-        //return $this->getTags->lists('id')->all();
         return $this->getTags->pluck('id')->toArray();
+    }
+
+    public function addComment(Comment $comment)
+    {
+        $this->getComments()->save($comment);
     }
 }

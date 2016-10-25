@@ -13,7 +13,7 @@
 </head>
 <body>
     @include('partials/navbar')
-    <div class="content">
+    <div class="container">
         {{--@include('partials/flash')--}}
         @include('vendor/flash/message')
         @yield('content')

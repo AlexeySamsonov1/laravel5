@@ -12,4 +12,21 @@
             @endforeach
         </ul>
     @endunless
+    <div class="comments-block">
+        @unless($article->getComments->isEmpty())
+            <h4>Comments:</h4>
+            <ul class="list-group">
+                @foreach($article->getComments as $comment)
+                    <li class="list-group-item">
+                        {{ $comment->body }}
+                        <a href="#" class="comments-author"> {{ $comment->getUser->name }}</a>
+                    </li>
+                @endforeach
+            </ul>
+        @endunless
+    </div>
+    <hr>
+    {{--<a href="{{ route('comment.create', $article) }}">Add a comment</a>--}}
+    @include('comment.create')
+    <hr>
 @stop

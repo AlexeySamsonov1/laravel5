@@ -38,6 +38,16 @@ class User extends Authenticatable
     }
 
     /**
+     * User has many comments.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function getComments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    /**
      * This method is used for \App\Http\Middleware\RedirectIfAManager
      *
      * @return bool

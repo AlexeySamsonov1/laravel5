@@ -3,12 +3,10 @@
     <h1>Write a new Article</h1>
 
     <hr/>
-    <div class="container">
-        {!! Form::open(['url' => 'articles']) !!}
-            @include('articles/partials/form', ['submitButtonText' => 'Add Article'])
-        {!! Form::close() !!}
+    {!! Form::model($article = new \App\Article, ['url' => 'articles']) !!}
+        @include('articles/partials/form', ['submitButtonText' => 'Add Article'])
+    {!! Form::close() !!}
 
-        {{--Display errors--}}
-        @include('errors/list')
-    </div>
+    {{--Display errors--}}
+    @include('errors/list')
 @stop

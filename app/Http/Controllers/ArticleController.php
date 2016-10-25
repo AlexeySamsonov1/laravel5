@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Article;
+use App\Comment;
 use App\Http\Requests\ArticleRequest;
 use App\Tag;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ class ArticleController extends Controller
         $this->middleware[] = [
             'middleware' => 'auth',
             'options' => [
-                'except' => 'index'
+                'except' => ['index', 'show']
             ],
         ];
     }
@@ -29,9 +30,8 @@ class ArticleController extends Controller
     public function index()
     {
         $articles = Article::latest('published_at')->isPublished()->get();
-        $latest = Article::latest()->first();
-
-        return view('articles/index', ['articles' => $articles, 'latest' => $latest]);
+        //dd($articles);
+        return view('articles/index', ['articles' => $articles]);
     }
 
     /**
@@ -54,9 +54,6 @@ class ArticleController extends Controller
     public function store(Request $request)
     {
         $this->createArticle($request);
-        //$tagIds = $request->input('tag_list');
-        //$article->getTags()->attach($tagIds);
-
         //session()->flash('flash_message', 'The article has been created!');
         flash()->success('The article has been created!');
 
@@ -66,25 +63,31 @@ class ArticleController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param Article $article
      * @return \Illuminate\Http\Response
+     * @internal param int $id
      */
-    public function show($id)
+    public function show(Article $article)
     {
-        $article = Article::findOrFail($id);
-
+        // Eager Loading.
+        $article->load('getComments', 'getTags');
+        // the same is
+        //$article = Article::with('getComments', 'getTags')->findOrFail($article->id);
+            //return ($article->getComments);
+        //$comments = $article->getComments;
         return view('articles/show', ['article' => $article]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param Article $article
      * @return \Illuminate\Http\Response
+     * @internal param int $id
      */
-    public function edit($id)
+    public function edit(Article $article)
     {
-        $article = Article::findOrFail($id);
+        //$article = Article::findOrFail($id);
         $tags = Tag::pluck('name', 'id');
         return view('articles/edit', ['article' => $article, 'tags' => $tags]);
     }
@@ -93,15 +96,15 @@ class ArticleController extends Controller
      * Update the specified resource in storage.
      *
      * @param ArticleRequest|Request $request
-     * @param  int $id
+     * @param Article $article
      * @return \Illuminate\Http\Response
      */
-    public function update(ArticleRequest $request, $id)
+    public function update(ArticleRequest $request, Article $article)
     {
-        $article = Article::findOrFail($id);
+        //$article = Article::findOrFail($id);dd($article);
         $article->update($request->all());
         // Sync up pivot table in a database.
-        $this->syncTags($article, $request->input('tag_list'));
+        $article->getTags()->sync($request->input('tag_list'));
 
         return redirect('articles');
     }
@@ -118,17 +121,6 @@ class ArticleController extends Controller
     }
 
     /**
-     * Sync up the list of tags in the database.
-     *
-     * @param Article $article
-     * @param array $tags
-     */
-    private function syncTags(Article $article, array $tags)
-    {
-        $article->getTags()->sync($tags);
-    }
-
-    /**
      * Save an article.
      *
      * @param Request $request
@@ -137,8 +129,9 @@ class ArticleController extends Controller
     private function createArticle(Request $request)
     {
         $article = \Auth::user()->getArticles()->create($request->all());
-        $this->syncTags($article, $request->input('tag_list'));
+        $article->getTags()->attach($request->input('tag_list'));
 
         return $article;
     }
+
 }

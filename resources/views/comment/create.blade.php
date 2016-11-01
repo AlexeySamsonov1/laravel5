@@ -5,7 +5,7 @@
 {{--$article, ['method' => 'PATCH', 'action' => ['ArticleController@update', $article->id]]--}}
     <div class="form-group">
         {!! Form::label('body', 'Body:') !!}
-        {!! Form::textarea('body', null, ['class' => 'form-control']) !!}
+        {!! Form::textarea('body', old('body'), ['class' => 'form-control']) !!}
     </div>
     {!! Form::submit('Add a comment', ['class' => 'btn btn-primary']) !!}
 {!! Form::close() !!}

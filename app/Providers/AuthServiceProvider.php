@@ -22,7 +22,7 @@ class AuthServiceProvider extends ServiceProvider
      * @return void
      */
     public function boot()
-    {
+    {var_dump('111');
         $this->registerPolicies();
 
         //

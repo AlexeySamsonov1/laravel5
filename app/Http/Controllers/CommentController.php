@@ -10,6 +10,16 @@ use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
+    public function __construct()
+    {
+/*        $this->middleware[] = [
+            'middleware' => 'auth',
+            'options' => [
+                'only' => ['create', 'edit']
+            ],
+        ];*/
+    }
+
     public function create(Article $article)
     {
         return view('comment.create', ['article' => $article]);
@@ -26,6 +36,9 @@ class CommentController extends Controller
      */
     public function store(Request $request, Article $article)
     {
+        $this->validate($request, [
+           'body' => 'required|min:3'
+        ]);
         //$article->getComments()->create(['body' => $request->body, 'user_id' => Auth::user()->id]);
         //\Auth::user()->getComments()->create($request->all());
 /*        $comment = new Comment([

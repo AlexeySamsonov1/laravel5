@@ -17,7 +17,7 @@ class Comment extends Model
      *
      * @var array
      */
-    protected $guarded = ['id'];
+    protected $fillable = ['body'];
 
     /**
      * Get the articles, associated with the given comment.

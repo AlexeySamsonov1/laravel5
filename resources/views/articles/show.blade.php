@@ -19,7 +19,7 @@
                 @foreach($article->getComments as $comment)
                     <li class="list-group-item">
                         {{ $comment->body }}
-                        <a href="#" class="comments-author"> {{ $comment->getUser->name }}</a>
+                        <a href="#" class="comments-author pull-right"> {{ $comment->getUser->name }}</a>
                     </li>
                 @endforeach
             </ul>

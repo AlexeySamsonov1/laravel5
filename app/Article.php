@@ -43,7 +43,6 @@ class Article extends Model
         $this->attributes['published_at'] = Carbon::parse($date);
     }
 
-
     /**
      *
      *

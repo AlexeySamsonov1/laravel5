@@ -10,7 +10,9 @@
 | to using a Closure or controller method. Build something great!
 |
 */
-
+Route::get('/test', function (DatabaseSeeder $ds) {
+   dd($ds->run());
+});
 Route::get('/', function () {
     return view('welcome');
 });
